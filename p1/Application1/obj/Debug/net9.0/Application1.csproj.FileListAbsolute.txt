@@ -33,3 +33,4 @@ C:\proyectoVz\p1\Application1\obj\Debug\net9.0\ref\Application1.dll
 C:\proyectoVz\p1\Application1\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\proyectoVz\p1\Application1\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\proyectoVz\p1\Application1\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\proyectoVz\p1\Application1\obj\Debug\net9.0\Application1.sourcelink.json

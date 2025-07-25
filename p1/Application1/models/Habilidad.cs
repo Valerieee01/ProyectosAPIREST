@@ -5,7 +5,14 @@ public class Habilidad
 
     public string Nombre { get; set; } = string.Empty;
 
-    public string Apelido { get; set; } = string.Empty;
+    public EPotencia Potencia;
+    public enum EPotencia
+    {
+        Seave,
+        Moderado,
+        Intenso,
+        RePotente,
+        Extremo
+    } 
 
-    public List<Habilidad>? Habilidades { get; set; }
 }
