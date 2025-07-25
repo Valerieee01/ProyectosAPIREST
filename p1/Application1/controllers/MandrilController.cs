@@ -64,11 +64,31 @@ public class MandrilController : ControllerBase
         var mandril = MandrilDataStorage.Current.Mandriles.FirstOrDefault(x => x.Id == mandrilId);
 
         if (mandril == null)
+        {
             return NotFound("El Mnadril solicitado no exite");
+        }
 
         mandril.Nombre = mandrilsInsert.Nombre;
         mandril.Apelido = mandrilsInsert.Apelido;
 
+        return NoContent();
+
+    }
+
+    [HttpDelete("{mandrilId}")]
+    public ActionResult<Mandrils> DeleteMandril(int mandrilId)
+    {
+
+        var mandril = MandrilDataStorage.Current.Mandriles.FirstOrDefault(x => x.Id == mandrilId);
+
+        if (mandril == null)
+        {
+            return NotFound("El Mnadril solicitado no exite");
+        }
+
+        MandrilDataStorage.Current.Mandriles.Remove(mandril);
+
+        return NoContent();
     }
 
 }

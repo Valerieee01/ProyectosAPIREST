@@ -5,7 +5,7 @@ public class Habilidad
 
     public string Nombre { get; set; } = string.Empty;
 
-    public EPotencia Potencia;
+    public EPotencia Potencia { get; set; }
     public enum EPotencia
     {
         Seave,
