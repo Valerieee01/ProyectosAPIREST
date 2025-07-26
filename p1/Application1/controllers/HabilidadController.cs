@@ -21,32 +21,52 @@ public class HabilidadController : ControllerBase
         return Ok(mandril.Habilidades);
     }
 
-    [HttpGet("[habilidadId]")]
-    public ActionResult<Habilidad> GetHabilitiesById(int mandrilId, int habilityId)
+    [HttpGet("{habilidadId}")]
+     public ActionResult<Habilidad> GetHabilitiesById(int mandrilId, int habilidadId)
+     {
+         var mandril = MandrilDataStorage.Current.Mandriles.FirstOrDefault(x => x.Id == mandrilId);
+
+         if (mandril == null)
+         {
+             return NotFound("El Mandril Solicitado no existe.");
+         }
+
+         var habilidad = mandril.Habilidades?.FirstOrDefault(h => h.Id == habilidadId);
+         if (habilidad == null)
+         {
+             return NotFound("Este Mandril no tiene la habilidad solicitada.");
+         }
+         return Ok(habilidad);
+     }
+
+    [HttpPost]
+    public ActionResult<Habilidad> PostHability(int mandrilId, HabilidadInsert habilidadInsert)
     {
         var mandril = MandrilDataStorage.Current.Mandriles.FirstOrDefault(x => x.Id == mandrilId);
 
         if (mandril == null)
         {
-            return NotFound("El Mnadril Solicitado no existe.");
+            return NotFound("El Mandril Solicitado no existe.");
         }
 
-        var habilidad = mandril.Habilidades?.FirstOrDefault(h => h.Id == habilityId);
-        if (habilidad == null)
+        var habilidadExistente = mandril.Habilidades?.FirstOrDefault(h => h.Nombre == habilidadInsert.Nombre);
+
+        if (habilidadExistente != null)
         {
-            return NotFound("El Mnadril Solicitado no existe.");
+            return BadRequest("Ya existe una habilidad con este");
         }
-        return Ok(habilidad);
-    }
 
-    // [HttpPost]
-    // public ActionResult<Habilidad> PostHability()
-    // {
+        var maxHabilidadId = mandril.Habilidades?.Max(h => h.Id);
 
-    // }
+        var habilidadNueva = new Habilidad()
+        {
+            Id = maxHabilidadId + 1,
+            Nombre =  
+        }
+     }
 
     // [HttpPut]
-    // public ActionResult<Habilidad> PutHability([FromRoute] int habilityId, [FromBody])
+    // public ActionResult<Habilidad> PutHability([FromRoute] int habilidadId, [FromBody])
     // {
 
     // }

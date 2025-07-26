@@ -8,6 +8,6 @@ public class Mandrils
 
     public string Apelido { get; set; } = string.Empty;
 
-    public List<Habilidad>? Habilidades { get; set; }
+    public List<Habilidad>? Habilidades { get; set; } = new List<Habilidad> { };
 
 }
