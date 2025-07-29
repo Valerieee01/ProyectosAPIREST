@@ -1,3 +1,4 @@
+using Application1.helpers;
 using Application1.models;
 using Application1.services;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +16,7 @@ public class HabilidadController : ControllerBase
 
         if (mandril == null)
         {
-            return NotFound("El Mnadril Solicitado no existe.");
+            return NotFound(Mensajes.Mandril.NotFound);
         }
 
         return Ok(mandril.Habilidades);
@@ -28,13 +29,13 @@ public class HabilidadController : ControllerBase
 
          if (mandril == null)
          {
-             return NotFound("El Mandril Solicitado no existe.");
+             return NotFound(Mensajes.Mandril.NotFound);
          }
 
          var habilidad = mandril.Habilidades?.FirstOrDefault(h => h.Id == habilidadId);
          if (habilidad == null)
          {
-             return NotFound("Este Mandril no tiene la habilidad solicitada.");
+             return NotFound(Mensajes.Habilidad.NotFound);
          }
          return Ok(habilidad);
      }
@@ -46,7 +47,7 @@ public class HabilidadController : ControllerBase
 
         if (mandril == null)
         {
-            return NotFound("El Mandril Solicitado no existe.");
+            return NotFound(Mensajes.Mandril.NotFound);
         }
 
         var habilidadExistente = mandril.Habilidades?.FirstOrDefault(h => h.Nombre == habilidadInsert.Nombre);
@@ -56,23 +57,75 @@ public class HabilidadController : ControllerBase
             return BadRequest("Ya existe una habilidad con este");
         }
 
-        var maxHabilidadId = mandril.Habilidades?.Max(h => h.Id);
+        var maxHabilidad = mandril.Habilidades.Max(h => h.Id);
 
         var habilidadNueva = new Habilidad()
         {
-            Id = maxHabilidadId + 1,
-            Nombre =  
-        }
+            Id = maxHabilidad + 1,
+            Nombre = habilidadInsert.Nombre,
+            Potencia = habilidadInsert.Potencia
+        };
+
+        mandril.Habilidades.Add(habilidadNueva);
+
+        return CreatedAtAction(nameof(GetHabilitiesById), 
+            new { mandrilId = mandrilId, habilidadId = habilidadNueva.Id},
+            habilidadNueva
+        );
      }
 
-    // [HttpPut]
-    // public ActionResult<Habilidad> PutHability([FromRoute] int habilidadId, [FromBody])
-    // {
+     [HttpPut]
+     public ActionResult<Habilidad> PutHabilidad ( int habilidadId, int mandrilId, HabilidadInsert habilidadInsert)
+     {
+        var mandril = MandrilDataStorage.Current.Mandriles.FirstOrDefault(x => x.Id == mandrilId);
 
-    // }
+        if (mandril == null)
+        {
+            return NotFound(Mensajes.Mandril.NotFound);
+        }
 
-    // [HttpDelete]
-    // public ActionResult<Habilidad> DeleteHability()
-    // {
-    // }
+        var habilidadExistente = mandril.Habilidades?
+        .FirstOrDefault(h => h.Id == habilidadId);
+
+        if (habilidadExistente == null)
+        {
+            return BadRequest(Mensajes.Habilidad.NotFound);
+        }
+
+        var habilidadMismoNombre = mandril.Habilidades?
+        .FirstOrDefault(H => H.Id != habilidadId && H.Nombre == habilidadInsert.Nombre);
+
+        if (habilidadMismoNombre != null)
+        {
+            return BadRequest(Mensajes.Habilidad.NombreExistente);
+        }
+
+        habilidadExistente.Nombre = habilidadInsert.Nombre;
+        habilidadExistente.Potencia = habilidadInsert.Potencia;
+
+        return NoContent();
+     }
+
+    [HttpDelete]
+    public ActionResult<Habilidad> DeleteHabilidad(int habilidadId, int mandrilId)
+    {
+        var mandril = MandrilDataStorage.Current.Mandriles.FirstOrDefault(x => x.Id == mandrilId);
+
+        if (mandril == null)
+        {
+            return NotFound(Mensajes.Mandril.NotFound);
+        }
+
+        var habilidadExistente = mandril.Habilidades?.FirstOrDefault(h => h.Id == habilidadId);
+
+        if (habilidadExistente != null)
+        {
+            return BadRequest(Mensajes.Habilidad.NotFound);
+        }
+
+
+        mandril.Habilidades?.Remove(habilidadExistente);
+
+        return NoContent();
+     }
 }

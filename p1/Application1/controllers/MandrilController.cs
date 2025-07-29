@@ -1,3 +1,4 @@
+using Application1.helpers;
 using Application1.models;
 using Application1.services;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +22,7 @@ public class MandrilController : ControllerBase
 
         if (mandril == null)
         {
-            return NotFound("El Mnadril Solicitado no existe.");
+            return NotFound(Mensajes.Mandril.NotFound);
         }
         return Ok(mandril);
     }
@@ -65,7 +66,7 @@ public class MandrilController : ControllerBase
 
         if (mandril == null)
         {
-            return NotFound("El Mnadril solicitado no exite");
+            return NotFound(Mensajes.Mandril.NotFound);
         }
 
         mandril.Nombre = mandrilsInsert.Nombre;
@@ -83,7 +84,7 @@ public class MandrilController : ControllerBase
 
         if (mandril == null)
         {
-            return NotFound("El Mnadril solicitado no exite");
+            return NotFound(Mensajes.Mandril.NotFound);
         }
 
         MandrilDataStorage.Current.Mandriles.Remove(mandril);
